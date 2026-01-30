@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SAMANWAYA{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{% url 'dashboard' %}" class="nav-brand">SAMANWAYA</a>
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+            <span class="nav-link">Hello, {{ user.username }}</span>
+            {% if user.is_approved %}
+            <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+            {% endif %}
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="nav-link"
+                    style="background:none; border:none; cursor:pointer;">Logout</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="nav-link">Login</a>
+
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container animate-fade-in">
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+
+</html>

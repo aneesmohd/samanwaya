@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Dashboard - SAMANWAYA{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1>Overview</h1>
+    <p style="color: var(--text-muted);">Welcome back, {{ user.get_full_name|default:user.username }}</p>
+</div>
+
+<div class="dashboard-grid">
+    {% for account in accounts %}
+    <div class="glass-card" style="display: flex; flex-direction: column; height: 100%;">
+        <div class="account-card-header">
+            <span class="badge {% if account.account_type == 'club' %}badge-club{% else %}badge-event{% endif %}">
+                {{ account.get_account_type_display }}
+            </span>
+            <span style="font-size: 0.9rem; color: var(--text-muted);">{{ account.created_at|date:"M d, Y" }}</span>
+        </div>
+
+        <h3 style="margin-bottom: 0.5rem;">
+            <a href="{% url 'account_detail' account.pk %}" style="color: white; text-decoration: none;">
+                {{ account.name }}
+            </a>
+        </h3>
+
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem; min-height: 3em;">
+            {{ account.description|truncatewords:20 }}
+        </p>
+
+        <div style="margin-top: auto; margin-right: 3rem;">
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Current Balance</p>
+            <div class="balance {% if account.balance >= 0 %}positive{% else %}negative{% endif %}">
+                &#8377;{{ account.balance|floatformat:2 }}
+            </div>
+
+            <a href="{% url 'account_detail' account.pk %}" class="btn btn-primary"
+                style="display: block; width: 100%; margin-top: 1rem; text-align: center;">
+                View Details
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="glass-card" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+        <h3>No accounts found</h3>
+        <p style="color: var(--text-muted);">Check back later for updates.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

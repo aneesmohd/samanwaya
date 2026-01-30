@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Add Transaction - SAMANWAYA{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 4rem auto;">
+    <div class="glass-card">
+        <h2 style="margin-bottom: 2rem;">Add Transaction</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}
+                <small style="color: var(--danger);">{{ error }}</small>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">Save Transaction</button>
+                <a href="{% url 'dashboard' %}" class="btn"
+                    style="flex: 1; background: rgba(255,255,255,0.1); color: white;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

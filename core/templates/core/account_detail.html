@@ -1,0 +1,126 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ account.name }} - SAMANWAYA{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+    <div>
+        <a href="{% url 'dashboard' %}" style="color: var(--text-muted); font-size: 0.9rem;">&larr; Back to
+            Dashboard</a>
+        <h1 style="margin-top: 0.5rem;">{{ account.name }}</h1>
+        <p style="color: var(--text-muted);">{{ account.description }}</p>
+    </div>
+
+    <div style="text-align: right;">
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <!-- Total Income -->
+            <div class="glass-card" style="padding: 1rem 1.5rem; text-align: center;">
+                <div class="balance positive" style="font-size: 1.2rem;">
+                    +&#8377;{{ total_income|stringformat:"0.2f" }}
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Total Income</div>
+            </div>
+
+            <!-- Total Expense -->
+            <div class="glass-card" style="padding: 1rem 1.5rem; text-align: center;">
+                <div class="balance negative" style="font-size: 1.2rem;">
+                    -&#8377;{{ total_expense|stringformat:"0.2f" }}
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Total Expense</div>
+            </div>
+
+            <!-- Current Balance -->
+            <div class="glass-card" style="padding: 1rem 1.5rem; text-align: center;">
+                <div class="balance {% if account.balance >= 0 %}positive{% else %}negative{% endif %}"
+                    style="font-size: 1.2rem;">
+                    &#8377;{{ account.balance|stringformat:"0.2f" }}
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Current Balance</div>
+            </div>
+        </div>
+
+        {% if transaction_form %}
+        <div style="margin-top: 1rem;">
+            <a href="{% url 'transaction_create' %}?account={{ account.pk }}" class="btn btn-primary">
+                + Add Transaction
+            </a>
+        </div>
+        {% endif %}
+
+        <div style="margin-top: 1rem;">
+            <a href="{% url 'account_pdf' account.pk %}" class="btn btn-secondary"
+                style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                Download Statement (PDF)
+            </a>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <!-- Transactions Column -->
+    <div>
+        <div class="glass-card">
+            <h3 style="margin-bottom: 1.5rem;">Transaction History</h3>
+
+            {% if transactions %}
+            <ul class="transaction-list">
+                {% for transaction in transactions %}
+                <li class="transaction-item">
+                    <div>
+                        <div style="font-weight: 600;">{{ transaction.description }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">
+                            {{ transaction.date }} &bull; {{ transaction.performed_by.username }}
+                            {% if transaction.receipt %}
+                            &bull; <a href="{{ transaction.receipt.url }}" target="_blank">View Receipt</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span
+                            class="{% if transaction.transaction_type == 'credit' %}balance positive{% else %}balance negative{% endif %}"
+                            style="font-size: 1.1rem;">
+                            {% if transaction.transaction_type == 'credit' %}+{% else %}-{% endif %}
+                            &#8377;{{ transaction.amount|stringformat:"0.2f" }}
+                        </span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="text-align: center; color: var(--text-muted); padding: 2rem;">No transactions yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Notes Column -->
+    <div>
+        <div class="glass-card">
+            <h3>Notes</h3>
+            <div style="margin-bottom: 1.5rem; max-height: 400px; overflow-y: auto;">
+                {% for note in notes %}
+                <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem 0;">
+                    <p style="font-size: 0.95rem;">{{ note.text }}</p>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                        {{ note.author.username }} &bull; {{ note.created_at|date:"M d g:i a" }}
+                    </div>
+                </div>
+                {% empty %}
+                <p style="text-align: center; color: var(--text-muted); padding: 1rem;">No notes yet.</p>
+                {% endfor %}
+            </div>
+
+            {% if note_form %}
+            <form action="{% url 'note_create' account.pk %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ note_form.text }}
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 0.9rem;">
+                    Post Note
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

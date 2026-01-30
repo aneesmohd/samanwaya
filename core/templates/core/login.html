@@ -1,0 +1,29 @@
+﻿{% extends 'core/base.html' %}
+
+{% block title %}Login - SAMANWAYA{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 4rem auto;">
+    <div class="glass-card">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Member Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div style="color: var(--danger); margin-bottom: 1rem;">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label">{{ field.label }}</label>
+                <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control" {% if field.field.required %}required{% endif %}>
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
