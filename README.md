@@ -1,5 +1,5 @@
-# Samanwaya - Club Accounting System
 
+<<<<<<< HEAD
 Samanwaya is a Django-based accounting application designed for clubs and organizations to manage their finances effectively. It provides a simple and intuitive interface for tracking accounts, transactions, and generating statements.
 
 ## Features
@@ -81,3 +81,5 @@ Please make sure to update tests as appropriate.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+=======
+>>>>>>> b68d07e9d6ba9f00f4704879bdfe3bccdc6cd35e
