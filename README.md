@@ -72,8 +72,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-=======
->>>>>>> b68d07e9d6ba9f00f4704879bdfe3bccdc6cd35e
