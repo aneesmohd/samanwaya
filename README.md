@@ -23,7 +23,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 1.  **Clone the repository:**
     ```bash
+<<<<<<< HEAD
     git clone https://github.com/your-username/samanwaya.git
+=======
+    https://github.com/aneesmohd/samanwaya.git
+>>>>>>> d994c5e046e69600c1b709eeea5d9d5775c70309
     cd samanwaya
     ```
 
